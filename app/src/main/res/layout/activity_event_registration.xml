@@ -71,6 +71,11 @@
                 android:layout_width="match_parent"
                 android:hint="PASC Volunteer Name"
                 app:errorEnabled="true"
+
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:id="@+id/text_input_volunteer"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/white">
@@ -78,6 +83,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/volunteer"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white">
 
@@ -88,6 +98,11 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 app:errorEnabled="true"
+
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:hint="Participant 1"
                 android:id="@+id/text_input_par1"
                 android:layout_height="wrap_content"
@@ -98,6 +113,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/participant1"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     >
@@ -107,6 +127,11 @@
                 android:layout_width="match_parent"
                 app:errorEnabled="true"
                 android:hint="Participant 2"
+
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:id="@+id/text_input_par2"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/white">
@@ -116,6 +141,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/participant2"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     >
@@ -126,6 +156,11 @@
                 android:layout_width="match_parent"
                 app:errorEnabled="true"
                 android:hint="E-Mail Id"
+
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:id="@+id/text_input_mail"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/white">
@@ -135,6 +170,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/email"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     >
@@ -146,6 +186,11 @@
                 android:layout_width="match_parent"
                 app:errorEnabled="true"
                 android:hint="Contact Number"
+
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:id="@+id/text_input_contact"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/white">
@@ -154,6 +199,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/contact"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:inputType="phone"
                     android:layout_marginBottom="15sp"
                     android:textColorHint="@color/white"
@@ -166,6 +216,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
+                app:boxCornerRadiusBottomStart="4dp"
+                app:boxCornerRadiusTopEnd="4dp"
+                app:boxCornerRadiusTopStart="4dp"
+                app:boxCornerRadiusBottomEnd="4dp"
                 android:id="@+id/text_input_college"
                 android:hint="College Name"
                 android:textColorHint="@color/white">
@@ -174,6 +228,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/college"
+
+                    app:boxCornerRadiusBottomStart="4dp"
+                    app:boxCornerRadiusTopEnd="4dp"
+                    app:boxCornerRadiusTopStart="4dp"
+                    app:boxCornerRadiusBottomEnd="4dp"
                     android:layout_marginBottom="15sp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"

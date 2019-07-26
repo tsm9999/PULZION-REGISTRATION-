@@ -76,7 +76,7 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
         FirebaseApp.initializeApp(WorkshopRegistrationActivity.this);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         par1 = findViewById(R.id.participant1);
-        par2 = findViewById(R.id.participant2);
+         par2 = findViewById(R.id.participant2);
         vol =  findViewById(R.id.volunteer);
         mail = findViewById(R.id.email);
         contact = findViewById(R.id.contact);
