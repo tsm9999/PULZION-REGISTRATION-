@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class WorkshopUser {
     String participant1;
 
-    public WorkshopUser(String participant1, String volunteer, String mail, String contact, String collegeName, String slot, ArrayList<String> events, int cost) {
+    public WorkshopUser(String participant1, String volunteer, String mail, String contact, String collegeName, String slot, ArrayList<String> events, int cost,int pending) {
         this.participant1 = participant1;
         this.volunteer = volunteer;
         this.mail = mail;
@@ -14,6 +14,7 @@ public class WorkshopUser {
         this.slot = slot;
         this.events = events;
         this.cost = cost;
+        this.pending=pending;
     }
 
     public String getParticipant1() {
@@ -87,5 +88,15 @@ public class WorkshopUser {
     String slot;
     ArrayList<String> events;
     int cost;
+
+    public int getPending() {
+        return pending;
+    }
+
+    public void setPending(int pending) {
+        this.pending = pending;
+    }
+
+    int pending;
 
 }

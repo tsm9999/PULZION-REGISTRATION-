@@ -1,5 +1,7 @@
 package com.example.tanush.registrationmodule;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +28,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,7 +50,8 @@ public class EventRegistrationActivity extends AppCompatActivity
 
     private DrawerLayout drawerLayout;
     boolean a = false, b = false, c = false, d = false, e = false;
-    TextInputEditText par1, par2, vol, mail, contact, collegeName;
+    TextInputEditText par1, par2,  mail, contact, collegeName;
+    TextView vol;
     int amount = 0;
     String am,am1;
     CheckBox fe, se, te, be;
@@ -52,7 +60,9 @@ public class EventRegistrationActivity extends AppCompatActivity
     Button submit;
     TextView fcost;
     ImageView cash, paytm;
+    FirebaseAuth firebaseAuth;
 
+    FirebaseUser firebaseUser;
     ArrayList<String> arrayList=new ArrayList<>();
     TextInputLayout t1,t2,t3,t4,t5,t6;
     private FirebaseFirestore db;
@@ -79,6 +89,8 @@ public class EventRegistrationActivity extends AppCompatActivity
     private Button verify;
     Toolbar toolbar;
 
+    private ProgressDialog progressDialog;
+    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
@@ -87,10 +99,12 @@ public class EventRegistrationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_registration);
 
-
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseUser=firebaseAuth.getCurrentUser();
+        vol=findViewById(R.id.text_input_volunteer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        vol.setText(firebaseUser.getEmail());
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null){
@@ -102,6 +116,8 @@ public class EventRegistrationActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseUser=firebaseAuth.getCurrentUser();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -120,7 +136,7 @@ public class EventRegistrationActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         par1 = findViewById(R.id.participant1);
         par2 = findViewById(R.id.participant2);
-        vol =  findViewById(R.id.volunteer);
+        //vol =  findViewById(R.id.volunteer);
         mail = findViewById(R.id.email);
         contact = findViewById(R.id.contact);
         collegeName = findViewById(R.id.college);
@@ -129,7 +145,7 @@ public class EventRegistrationActivity extends AppCompatActivity
 
 
 
-        t1=findViewById(R.id.text_input_volunteer);
+        //t1=findViewById(R.id.text_input_volunteer);
         t2=findViewById(R.id.text_input_par1);
         t3=findViewById(R.id.text_input_par2);
         t4=findViewById(R.id.text_input_mail);
@@ -151,7 +167,7 @@ public class EventRegistrationActivity extends AppCompatActivity
         crDextrous = db.collection("Dextrous");
         crCerebro = db.collection("Cerebro");
         crphotoShopRoyale = db.collection("Photoshop_Royale");
-        crbugOff = db.collection("BugOff");
+
         crquiz2Bid = db.collection("Quiz2Bid");
         crInsight = db.collection("Insight");
         crGOT = db.collection("GOT");
@@ -219,390 +235,408 @@ public class EventRegistrationActivity extends AppCompatActivity
                 }
 
                 if(funcol()&&funcon()&&funpar1()&&funmail()&&funvol()) {
-//                    final AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(EventRegistrationActivity.this);
-//                    final View mView = getLayoutInflater().inflate(R.layout.activity_password_payment_cash, null);
-//
-//
-//                    mAlertDialog.setView(mView);
-//                    Button verify = mView.findViewById(R.id.verify);
-//                    final EditText password = mView.findViewById(R.id.etPassword);
-//                    final TextView textView = mView.findViewById(R.id.textView);
-//                    String temp = String.valueOf(amount);
-//                    textView.setText("To pay:- " + amount);
-//                    //               textView.setText("To Pay:- "+amount);
-//                    final AlertDialog dialog = mAlertDialog.create();
-//                    dialog.show();
-//                    verify.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v1) {
-//
+                    final AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(EventRegistrationActivity.this);
+                    final View mView = getLayoutInflater().inflate(R.layout.activity_password_payment_cash, null);
+
+
+                    mAlertDialog.setView(mView);
+                    Button verify = mView.findViewById(R.id.verify);
+                    final EditText password = mView.findViewById(R.id.etPassword);
+                    final TextView textView = mView.findViewById(R.id.textView);
+                    String temp = String.valueOf(amount);
+                    textView.setText("To pay:- " + amount);
+                    //               textView.setText("To Pay:- "+amount);
+                    final AlertDialog dialog = mAlertDialog.create();
+                    dialog.show();
+                    verify.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v1) {
+
+                            String volunteer=vol.getText().toString();
 //                            if (password.getText().toString().equals("PASC")) {
-//                                //Toast.makeText(EventRegistrationActivity.this, "User Registered into Database Successfully", Toast.LENGTH_SHORT).show();
-                                final String participant1 = par1.getText().toString();
-                                final String participant2 = par2.getText().toString();
-                                final String volunteer = vol.getText().toString();
-                                final String email = mail.getText().toString();
-                                final String contactno = contact.getText().toString();
-                                final String college = collegeName.getText().toString();
+                            //Toast.makeText(EventRegistrationActivity.this, "User Registered into Database Successfully", Toast.LENGTH_SHORT).show();
+                            final String participant1 = par1.getText().toString();
+                            final String participant2 = par2.getText().toString();
+                            final String email = mail.getText().toString();
+                            final String contactno = contact.getText().toString();
+                            final String college = collegeName.getText().toString();
 
 
-                    String event = "";
-                    int amount = 0;
-                    String rnd = getSaltString();
+                            String event = "";
+                            int amount = 0;
+                            String rnd = getSaltString();
 
-                    int fes = 0, ses = 0, tes = 0, bes = 0, bugi = 0, bugt = 0, jci = 0, jct = 0, rii = 0, rit = 0, cb = 0, dq = 0, wad = 0, eq = 0, dt = 0, pr = 0, q2b = 0, inst = 0, cbi = 0, cbt = 0, goti = 0, gott = 0, friendsi = 0, friendst = 0, hpi = 0, hpt = 0, marveli = 0, marvelt = 0, dci = 0, dct = 0;
-                    if (fe.isChecked()) fes = 1;
-                    if (se.isChecked()) ses = 1;
-                    if (te.isChecked()) tes = 1;
-                    if (be.isChecked()) bes = 1;
-
-
-                    if (bugOffI.isChecked()) {
-                        bugi = 1;
-                        //  amount+=80;
-                        arrayList.add("BugOff");
-                        //event += "BugOff(Individual), ";
-                    }
-                    if (bugOffT.isChecked()) {
-                        bugt = 1;
-                        //amount+=100;
-                        arrayList.add("BugOff");
-                        //event += "BugOff(Team), ";
-                        fcost.setText(String.valueOf(amount));
-                    }
-                    if (justCodingI.isChecked()) {
-                        jci = 1;
-                        //amount+=80;
-                        arrayList.add("JustCoding");
-                        //event += "JustCoding(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-                    }
-                    if (justCodingT.isChecked()) {
-                        jct = 1;
-                        //amount+=100;
-                        arrayList.add("JustCoding");
-                        //event += "JustCoding(Team), ";
-                        fcost.setText(String.valueOf(amount));
-                    }
-                    if (reCodeItI.isChecked()) {
-                        rii = 1;
-                        //amount+=80;
-                        arrayList.add("Recode_It");
-                        //event += "ReCode It!(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (reCodeItT.isChecked()) {
-                        rit = 1;
-                        //amount+=100;
-
-                        arrayList.add("Recode_It");
-                        //event += "ReCode It!(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (codeBuddy.isChecked()) {
-                        cb = 1;
-                        //amount+=100;
-                        arrayList.add("Code_Buddy");
-                        //event += "CodeBuddy(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (dataQuest.isChecked()) {
-                        dq = 1;
-                        //amount+=150;
-
-                        arrayList.add("DataQuest");
-                        //event += "DataQuest, ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (webAppDev.isChecked()) {
-                        wad = 1;
-                        //amount+=100;
-                        arrayList.add("Web_and_App_Development");
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (electroQuest.isChecked()) {
-                        eq = 1;
-                        //amount+=100;
-
-                        arrayList.add("Web_and_App_Development");
-                        //event += "ElectroQuest, ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (dextrous.isChecked()) {
-                        dt = 1;
-                        //amount+=100;
-                        //event += "Dextrous, ";
-                        arrayList.add("Dextrous");
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (photoShopRoyale.isChecked()) {
-                        pr = 1;
-                        //amount+=50;
-                        //event += "Photoshop Royale, ";
-                        arrayList.add("Photoshop_Royale");
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (quiz2Bid.isChecked()) {
-                        q2b = 1;
-                        //amount+=100;
-                        //event += "Quiz2Bid, ";
-
-                        arrayList.add("Quiz2Bid");
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (insight.isChecked()) {
-                        inst = 1;
-                        //amount+=50;
-
-                        arrayList.add("Insight");
-                        //event += "Insight, ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (cerebroI.isChecked()) {
-                        cbi = 1;
-                        //amount+=80;
-
-                        arrayList.add("Cerebro");
-                        //event += "Cerebro(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (cerebroT.isChecked()) {
-                        cbt = 1;
-                        //amount+=100;
-
-                        arrayList.add("Cerebro");
-                        //event += "Cerebro(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (GOTI.isChecked()) {
-                        goti = 1;
-                        //amount+=80;
-
-                        arrayList.add("GOT");
-                        //event += "GOT(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (GOTT.isChecked()) {
-                        gott = 1;
-                        //amount+=100;
-
-                        arrayList.add("GOT");
-                        //event += "GOT(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (friendsI.isChecked()) {
-                        friendsi = 1;
-                        //amount+=80;
-
-                        arrayList.add("Friends");
-                        //event += "Friends(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (friendsT.isChecked()) {
-                        friendst = 1;
-                        //amount+=100;
-                        arrayList.add("Friends");
-                        //event += "Friends(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (HPI.isChecked()) {
-                        hpi = 1;
-                        //amount+=100;
-
-                        arrayList.add("Harry_Potter");
-                        //event += "Harry Potter(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (HPT.isChecked()) {
-                        hpt = 1;
-                        //amount+=100;
-                        arrayList.add("Harry_Potter");
-                        //event += "Harry Potter(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (marvelI.isChecked()) {
-                        marveli = 1;
-                        //amount+=80;
-                        arrayList.add("Marvel");
-                        //event += "Marvel(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-                    }
-                    if (marvelT.isChecked()) {
-                        marvelt = 1;
-                        //amount+=100;
-                        arrayList.add("Marvel");
-                        //event+="Marvel(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (DCI.isChecked()) {
-                        dci = 1;
-                        //amount+=80;
-                        arrayList.add("DC");
-                        //event += "DC(Individual), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
-                    if (DCT.isChecked()) {
-                        dct = 1;
-                        //amount+=100;
-                        arrayList.add("DC");
-                        //event += "DC(Team), ";
-                        fcost.setText(String.valueOf(amount));
-
-                    }
+                            int fes = 0, ses = 0, tes = 0, bes = 0, bugi = 0, bugt = 0, jci = 0, jct = 0, rii = 0, rit = 0, cb = 0, dq = 0, wad = 0, eq = 0, dt = 0, pr = 0, q2b = 0, inst = 0, cbi = 0, cbt = 0, goti = 0, gott = 0, friendsi = 0, friendst = 0, hpi = 0, hpt = 0, marveli = 0, marvelt = 0, dci = 0, dct = 0;
+                            if (fe.isChecked()) fes = 1;
+                            if (se.isChecked()) ses = 1;
+                            if (te.isChecked()) tes = 1;
+                            if (be.isChecked()) bes = 1;
 
 
-                    if (bugi == 1 || bugt == 1) {
-                        BugOffUser bugOffUser = new BugOffUser(participant1, participant2, email, contactno, college, rnd, "null", 0);
-                        crbugOff.add(bugOffUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                //Toast.makeText(EventRegistrationActivity.this, "", Toast.LENGTH_SHORT).show();
+                            if (bugOffI.isChecked()) {
+                                bugi = 1;
+                                //  amount+=80;
+                                arrayList.add("BugOff");
+                                event += "BugOff(Individual)\n";
                             }
-                        });
-                    }
-
-                    if (jci == 1 || jct == 1) {
-                        JustCodingUser justCodingUser = new JustCodingUser(participant1, participant2, email, contactno, college, rnd, "null", 0, 0);
-                        crjustCoding.add(justCodingUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                //Toast.makeText(EventRegistrationActivity.this, "", Toast.LENGTH_SHORT).show();
+                            if (bugOffT.isChecked()) {
+                                bugt = 1;
+                                //amount+=100;
+                                arrayList.add("BugOff");
+                                event += "BugOff(Team)\n";
+                                fcost.setText(String.valueOf(amount));
                             }
-                        });
-                    }
-                    if (rii == 1 || rit == 1) {
-                        ReCodeItUser reCodeItUser = new ReCodeItUser(participant1, participant2, email, contactno, college, rnd, "null", 0, 0);
-                        crrecodeIt.add(reCodeItUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
+                            if (justCodingI.isChecked()) {
+                                jci = 1;
+                                //amount+=80;
+                                arrayList.add("JustCoding");
+                                event += "JustCoding(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+                            }
+                            if (justCodingT.isChecked()) {
+                                jct = 1;
+                                //amount+=100;
+                                arrayList.add("JustCoding");
+                                event += "JustCoding(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+                            }
+                            if (reCodeItI.isChecked()) {
+                                rii = 1;
+                                //amount+=80;
+                                arrayList.add("Recode_It");
+                                event += "ReCode It!(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
 
                             }
-                        });
-                    }
+                            if (reCodeItT.isChecked()) {
+                                rit = 1;
+                                //amount+=100;
 
-                    if (cb == 1) {
-                        CodeBuddyUser codeBuddyUser = new CodeBuddyUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crcodeBuddy.add(codeBuddyUser);
-                    }
+                                arrayList.add("Recode_It");
+                                event += "ReCode It!(Team)\n";
+                                fcost.setText(String.valueOf(amount));
 
-                    if (dq == 1) {
-                        DataQuestUser dataQuestUser = new DataQuestUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crdataQuest.add(dataQuestUser);
-                    }
-                    if (wad == 1) {
-                        WebAppDevUser webAppDevUser = new WebAppDevUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crwebAppDev.add(webAppDevUser);
-                    }
-                    if (eq == 1) {
-                        ElectroQuestUser electroQuestUser = new ElectroQuestUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crelectroQuest.add(electroQuestUser);
-                    }
-                    if (dt == 1) {
-                        DextrousUser dextrousUser = new DextrousUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crDextrous.add(dextrousUser);
-                    }
-                    if (pr == 1) {
-                        PhotoShopRoyaleUser photoShopRoyaleUser = new PhotoShopRoyaleUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crphotoShopRoyale.add(photoShopRoyaleUser);
-                    }
-                    if (q2b == 1) {
-                        Quiz2BidUser quiz2BidUser = new Quiz2BidUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crquiz2Bid.add(quiz2BidUser);
-                    }
-                    if (inst == 1) {
-                        InsightUser insightUser = new InsightUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crInsight.add(insightUser);
-                    }
-                    if (cbi == 1 || cbt == 1) {
-                        CerebroUser cerebroUser = new CerebroUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crCerebro.add(cerebroUser);
-                    }
-                    if (goti == 1 || gott == 1) {
-                        GOTUser gotUser = new GOTUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crGOT.add(gotUser);
-                    }
-                    if (friendsi == 1 || friendst == 1) {
-                        FriendsUser friendsUser = new FriendsUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crFriends.add(friendsUser);
-                    }
-                    if (hpi == 1 || hpt == 1) {
-                        HarryPotterUser harryPotterUser = new HarryPotterUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crharryPotter.add(harryPotterUser);
-                    }
-                    if (marveli == 1 || marvelt == 1) {
-                        MarvelDCUser marvelDCUser = new MarvelDCUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crMarvelvsDC.add(marvelDCUser);
-                    }
+                            }
+                            if (codeBuddy.isChecked()) {
+                                cb = 1;
+                                //amount+=100;
+                                arrayList.add("Code_Buddy");
+                                event += "CodeBuddy(Team)\n";
+                                fcost.setText(String.valueOf(amount));
 
-                    if (dci == 1 || dct == 1) {
-                        DCUser dcUser = new DCUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
-                        crDC.add(dcUser);
-                    }
+                            }
+                            if (dataQuest.isChecked()) {
+                                dq = 1;
+                                //amount+=150;
+
+                                arrayList.add("DataQuest");
+                                event += "DataQuest\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (webAppDev.isChecked()) {
+                                wad = 1;
+                                //amount+=100;
+                                event+="Web & App Development\n";
+                                arrayList.add("Web_and_App_Development");
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (electroQuest.isChecked()) {
+                                eq = 1;
+                                //amount+=100;
+
+                                arrayList.add("Web_and_App_Development");
+                                event += "ElectroQuest\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (dextrous.isChecked()) {
+                                dt = 1;
+                                //amount+=100;
+                                event += "Dextrous\n";
+                                arrayList.add("Dextrous");
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (photoShopRoyale.isChecked()) {
+                                pr = 1;
+                                //amount+=50;
+                                event += "Photoshop Royale\n";
+                                arrayList.add("Photoshop_Royale");
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (quiz2Bid.isChecked()) {
+                                q2b = 1;
+                                //amount+=100;
+                                event += "Quiz2Bid\n";
+
+                                arrayList.add("Quiz2Bid");
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (insight.isChecked()) {
+                                inst = 1;
+                                //amount+=50;
+
+                                arrayList.add("Insight");
+                                event += "Insight\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (cerebroI.isChecked()) {
+                                cbi = 1;
+                                //amount+=80;
+
+                                arrayList.add("Cerebro");
+                                event += "Cerebro(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (cerebroT.isChecked()) {
+                                cbt = 1;
+                                //amount+=100;
+
+                                arrayList.add("Cerebro");
+                                event += "Cerebro(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (GOTI.isChecked()) {
+                                goti = 1;
+                                //amount+=80;
+
+                                arrayList.add("GOT");
+                                event += "GOT(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (GOTT.isChecked()) {
+                                gott = 1;
+                                //amount+=100;
+
+                                arrayList.add("GOT");
+                                event += "GOT(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (friendsI.isChecked()) {
+                                friendsi = 1;
+                                //amount+=80;
+
+                                arrayList.add("Friends");
+                                event += "Friends(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (friendsT.isChecked()) {
+                                friendst = 1;
+                                //amount+=100;
+                                arrayList.add("Friends");
+                                event += "Friends(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (HPI.isChecked()) {
+                                hpi = 1;
+                                //amount+=100;
+
+                                arrayList.add("Harry_Potter");
+                                event += "Harry Potter(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (HPT.isChecked()) {
+                                hpt = 1;
+                                //amount+=100;
+                                arrayList.add("Harry_Potter");
+                                event += "Harry Potter(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (marvelI.isChecked()) {
+                                marveli = 1;
+                                //amount+=80;
+                                arrayList.add("Marvel");
+                                event += "Marvel(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+                            }
+                            if (marvelT.isChecked()) {
+                                marvelt = 1;
+                                //amount+=100;
+                                arrayList.add("Marvel");
+                                event+="Marvel(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (DCI.isChecked()) {
+                                dci = 1;
+                                //amount+=80;
+                                arrayList.add("DC");
+                                event += "DC(Individual)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
+                            if (DCT.isChecked()) {
+                                dct = 1;
+                                //amount+=100;
+                                arrayList.add("DC");
+                                event += "DC(Team)\n";
+                                fcost.setText(String.valueOf(amount));
+
+                            }
 
 
-                    User user = new User(participant1, participant2, volunteer, email, contactno, college, rnd, arrayList, amount);
-                    collectionReference.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(EventRegistrationActivity.this, "User Registered into Database", Toast.LENGTH_SHORT).show();
-                            //startActivity(new Intent(EventRegistrationActivity.this,PaymentActivity.class));
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(EventRegistrationActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            if (bugi == 1 || bugt == 1) {
+                                BugOffUser bugOffUser = new BugOffUser(participant1, participant2, email, contactno, college, rnd, "null", 0);
+                                crbugOff.add(bugOffUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        //Toast.makeText(EventRegistrationActivity.this, "", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
 
-                    Resources res = getResources();
-                    String dontreply = String.format(res.getString(R.string.donotreply));
-                    String email1 = mail.getText().toString();
-                    String subject = "Pulzion'19 : E-Receipt generated for your registration";
-                    String message = "Dear " + par1.getText().toString() + "\n\nGreetings from PASC!! \n\nThank you for registering for Pulzion'19. " + "Your details have been recorded and corresponding payment received. Please find below your Registration ID." + "\n\nRegistration ID: " + rnd + "\n\nThe above ID is unique to you. You can download your receipt from the My Receipts " + "section of the Pulzion'19 app using your unique Registration ID." + "\n\nOur app can be downloaded from: --------" + "Please feel free to reach out to us in case of doubts or difficulty.\nTanush Maddiwar: 7015032436\nAnother Contact: 0000000000" + "\n\nAll the Best!!\nRegards,\nPICT ACM Student Chapter\n\n\n" + dontreply;
+                            if (jci == 1 || jct == 1) {
+                                JustCodingUser justCodingUser = new JustCodingUser(participant1, participant2, email, contactno, college, rnd, "null", 0, 0);
+                                crjustCoding.add(justCodingUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        //Toast.makeText(EventRegistrationActivity.this, "", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                            if (rii == 1 || rit == 1) {
+                                ReCodeItUser reCodeItUser = new ReCodeItUser(participant1, participant2, email, contactno, college, rnd, "null", 0, 0);
+                                crrecodeIt.add(reCodeItUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
 
-                    //Creating SendMail object
-                    SendMail sm = new SendMail(EventRegistrationActivity.this, email1, subject, message);
+                                    }
+                                });
+                            }
 
-                    //Executing sendmail to send email
-                    sm.execute();
+                            if (cb == 1) {
+                                CodeBuddyUser codeBuddyUser = new CodeBuddyUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crcodeBuddy.add(codeBuddyUser);
+                            }
 
-//                                dialog.dismiss();
-                    //startActivity(new Intent(EventRegistrationActivity.this,EventRegistrationActivity.class));
+                            if (dq == 1) {
+                                DataQuestUser dataQuestUser = new DataQuestUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crdataQuest.add(dataQuestUser);
+                            }
+                            if (wad == 1) {
+                                WebAppDevUser webAppDevUser = new WebAppDevUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crwebAppDev.add(webAppDevUser);
+                            }
+                            if (eq == 1) {
+                                ElectroQuestUser electroQuestUser = new ElectroQuestUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crelectroQuest.add(electroQuestUser);
+                            }
+                            if (dt == 1) {
+                                DextrousUser dextrousUser = new DextrousUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crDextrous.add(dextrousUser);
+                            }
+                            if (pr == 1) {
+                                PhotoShopRoyaleUser photoShopRoyaleUser = new PhotoShopRoyaleUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crphotoShopRoyale.add(photoShopRoyaleUser);
+                            }
+                            if (q2b == 1) {
+                                Quiz2BidUser quiz2BidUser = new Quiz2BidUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crquiz2Bid.add(quiz2BidUser);
+                            }
+                            if (inst == 1) {
+                                InsightUser insightUser = new InsightUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crInsight.add(insightUser);
+                            }
+                            if (cbi == 1 || cbt == 1) {
+                                CerebroUser cerebroUser = new CerebroUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crCerebro.add(cerebroUser);
+                            }
+                            if (goti == 1 || gott == 1) {
+                                GOTUser gotUser = new GOTUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crGOT.add(gotUser);
+                            }
+                            if (friendsi == 1 || friendst == 1) {
+                                FriendsUser friendsUser = new FriendsUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crFriends.add(friendsUser);
+                            }
+                            if (hpi == 1 || hpt == 1) {
+                                HarryPotterUser harryPotterUser = new HarryPotterUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crharryPotter.add(harryPotterUser);
+                            }
+                            if (marveli == 1 || marvelt == 1) {
+                                MarvelDCUser marvelDCUser = new MarvelDCUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crMarvelvsDC.add(marvelDCUser);
+                            }
+
+                            if (dci == 1 || dct == 1) {
+                                DCUser dcUser = new DCUser(participant1, participant2, email, contactno, college, rnd, "null", amount, 0);
+                                crDC.add(dcUser);
+                            }
+
+
+                            User user = new User(participant1, participant2, volunteer, email, contactno, college, rnd, arrayList, amount);
+                            collectionReference.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(EventRegistrationActivity.this, "User Registered into Database", Toast.LENGTH_SHORT).show();
+                                    //startActivity(new Intent(EventRegistrationActivity.this,PaymentActivity.class));
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(EventRegistrationActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            Resources res = getResources();
+                            String dontreply = String.format(res.getString(R.string.donotreply));
+                            String email1 = mail.getText().toString();
+                            String subject = "Pulzion'19 : E-Receipt generated for your registration";
+                            String message = "Dear " + par1.getText().toString() + "\n\nGreetings from PASC!! \n\nThank you for registering for Pulzion'19. " + "Your details have been recorded and corresponding payment received. Please find below your Registration ID.\n\n"+"You have participated in the following events:-\n"+event + "\n\nRegistration ID: " + rnd + "\n\nThe above ID is unique to you. You can download your receipt from the My Receipts " + "section of the Pulzion'19 app using your unique Registration ID." + "\n\nOur app can be downloaded from: --------" + "Please feel free to reach out to us in case of doubts or difficulty.\nTanush Maddiwar: 7015032436\nAnother Contact: 0000000000" + "\n\nAll the Best!!\nRegards,\nPICT ACM Student Chapter\n\n\n" + dontreply;
+
+                            //Creating SendMail object
+                            SendMail sm = new SendMail(EventRegistrationActivity.this, email1, subject, message);
+
+                            //Executing sendmail to send email
+                            sm.execute();
+
+                            dialog.dismiss();
+                            final AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(EventRegistrationActivity.this);
+                            final View mView = getLayoutInflater().inflate(R.layout.progress_bar, null);
+                            mAlertDialog.setView(mView);
+                            final AlertDialog dialog = mAlertDialog.create();
+                            dialog.show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    startActivity(new Intent(EventRegistrationActivity.this,EventRegistrationActivity.class));
+                                }
+                            },2000);
+//                            ProgressBar progressBar = (ProgressBar)findViewById(R.id.spin_kit);
+//                            Sprite doubleBounce = new DoubleBounce();
+//                            progressBar.setIndeterminateDrawable(doubleBounce);
+//                            //startActivity(new Intent(EventRegistrationActivity.this,EventRegistrationActivity.class));
 //                                finish();
 //                                startActivity(getIntent());
 
 
 //                                Intent intent = new Intent(getBaseContext(), qrCode.class);
 //                                intent.putExtra("qrId", rnd);
+//
 //                                startActivity(intent);
+
                             }
+                    });
                         }
 
 
 
+            }
         });
-
-
     }
 
 
@@ -621,6 +655,8 @@ public class EventRegistrationActivity extends AppCompatActivity
         }
         if (id==R.id.logout){
             finish();
+            FirebaseAuth.getInstance().signOut();
+
             Intent intent=new Intent(getBaseContext(),LoginActivity.class);
             startActivity(intent);
         }

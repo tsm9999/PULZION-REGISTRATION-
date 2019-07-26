@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,6 +30,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,11 +46,12 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
     CheckBox c1,c2;
 
     boolean a = false, b = false, c = false, d = false, e = false;
-    TextInputEditText par1, par2, vol, mail, contact, collegeName;
+    TextInputEditText par1, par2,mail, contact, collegeName;
+    TextView vol;
     int amount = 0;
     String am,am1;
     CheckBox fe, se, te, be;
-    CheckBox bugOffI, bugOffT, justCodingI, justCodingT, reCodeItI, reCodeItT, codeBuddy, dataQuest, webAppDev, electroQuest, dextrous, photoShopRoyale, quiz2Bid, insight, cerebroI, cerebroT, GOTI, GOTT, friendsI, friendsT, HPI, HPT, marvelI, marvelT, DCI, DCT;
+    //CheckBox bugOffI, bugOffT, justCodingI, justCodingT, reCodeItI, reCodeItT, codeBuddy, dataQuest, webAppDev, electroQuest, dextrous, photoShopRoyale, quiz2Bid, insight, cerebroI, cerebroT, GOTI, GOTT, friendsI, friendsT, HPI, HPT, marvelI, marvelT, DCI, DCT;
     //CheckBox codebuddy,dataquest,webappdev,electroquest,dextrous,photoshoproyale,quiz2bid,insight,got,harrypotter,friends,marveldc;
     Button submit;
     TextView fcost;
@@ -58,6 +62,9 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            setTheme(R.style.DarkTheme);
+        else setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshop_registration);
 
@@ -73,29 +80,32 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
         }
 
 
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
         FirebaseApp.initializeApp(WorkshopRegistrationActivity.this);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         par1 = findViewById(R.id.participant1);
          par2 = findViewById(R.id.participant2);
-        vol =  findViewById(R.id.volunteer);
+        vol =  findViewById(R.id.text_input_volunteer);
         mail = findViewById(R.id.email);
         contact = findViewById(R.id.contact);
         collegeName = findViewById(R.id.college);
 
-        par1.setEnabled(true);
+        //par1.setEnabled(true);
         ok=findViewById(R.id.btn_Ok);
         mDrawerLayout =  findViewById(R.id.drawer_layout);
         NavigationView navigationView =findViewById(R.id.nav_view);
 
 
-        t1=findViewById(R.id.text_input_volunteer);
+        vol.setText(firebaseUser.getEmail());
+        //t1=findViewById(R.id.text_input_volunteer);
         t2=findViewById(R.id.text_input_par1);
         t3=findViewById(R.id.text_input_par2);
         t4=findViewById(R.id.text_input_mail);
         t5=findViewById(R.id.text_input_contact);
         t6=findViewById(R.id.text_input_college);
 
-        final CollectionReference WorkshopReference = db.collection("Workshop");
+        final CollectionReference workshopReference = db.collection("Workshop");
 
         fcost = findViewById(R.id.amount);
         fe = findViewById(R.id.fe);
@@ -109,27 +119,12 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggler);
         toggler.syncState();
-        int hack=0;
-        int iot=0;
+        final int[] hack = {0};
+        final int[] iot = {0};
         c1=findViewById(R.id.hack);
         c2=findViewById(R.id.iot);
-        if(c1.isChecked())
-        {
-            amount+=1500;
-            hack=1;
-            arrayList.add("Ethical_Hacking");
-        }
+        final String[] events = {""};
 
-        if(c2.isChecked())
-        {
-            amount+=1500;
-            iot=1;
-            arrayList.add("IOT");
-        }
-
-
-        final int finalHack = hack;
-        final int finalIot = iot;
         ok.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -157,6 +152,26 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                 }
 
                 if(funcol()&&funcon()&&funpar1()&&funmail()&&funvol()) {
+
+                    if(c1.isChecked())
+                    {
+                        amount+=1700;
+                        hack[0] =1;
+                        arrayList.add("Ethical_Hacking");
+                        events[0] +="Ethical_Hacking\n";
+                    }
+
+                    if(c2.isChecked())
+                    {
+                        amount+=1700;
+                        iot[0] =1;
+                        arrayList.add("AI");
+                        events[0] +="AI\n";
+                    }
+
+
+                    final int finalHack = hack[0];
+                    final int finalIot = iot[0];
                     final AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(WorkshopRegistrationActivity.this);
                     final View mView = getLayoutInflater().inflate(R.layout.activity_workshop_password, null);
                     mAlertDialog.setView(mView);
@@ -164,6 +179,8 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                     final EditText password = mView.findViewById(R.id.etPassword);
                     final TextView textView = mView.findViewById(R.id.textView);
                     final EditText paying = mView.findViewById(R.id.etPaying);
+
+                    final EditText etPay=mView.findViewById(R.id.etPaying);
                     String temp = String.valueOf(amount);
                     //textView.setText("To pay:- " + amount);
                     textView.setText("To Pay:- " + temp);
@@ -180,9 +197,11 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                                 final String email = mail.getText().toString();
                                 final String contactno = contact.getText().toString();
                                 final String college = collegeName.getText().toString();
+
+                                int paid=(int)Integer.parseInt(etPay.getText().toString());
                                 if (finalHack == 1||finalIot == 1) {
-                                    WorkshopUser workshopUser = new WorkshopUser(participant1,volunteer,email,contactno,college,"null",arrayList,Integer.parseInt(fcost.getText().toString()) );
-                                    WorkshopReference.add(workshopUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    WorkshopUser workshopUser = new WorkshopUser(participant1,volunteer,email,contactno,college,"null",arrayList,amount,(amount-paid));
+                                    workshopReference.add(workshopUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             //Toast.makeText(EventRegistrationActivity.this, "", Toast.LENGTH_SHORT).show();
@@ -195,7 +214,7 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                                     String dontreply = String.format(res.getString(R.string.donotreply));
                                     String email1 = mail.getText().toString();
                                     String subject = "Pulzion'19 : E-Receipt generated for your registration";
-                                    String message = "Dear " + par1.getText().toString() + "\n\nGreetings from PASC!! \n\nThank you for registering for Pulzion'19. " + "Your details have been recorded and corresponding payment received." + "\n\n You can download your receipt from the My Receipts " + "section of the Pulzion'19 app using your unique Registration ID." + "\n\nOur app can be downloaded from: --------" + "Please feel free to reach out to us in case of doubts or difficulty.\nTanush Maddiwar: 7015032436\nAnother Contact: 0000000000" + "\n\nAll the Best!!\nRegards,\nPICT ACM Student Chapter\n\n\n" + dontreply;
+                                    String message = "Dear " + par1.getText().toString() + "\n\nGreetings from PASC!! \n\nThank you for registering for Pulzion'19. " + "Your details have been recorded and corresponding payment received." + "\n\nYou have participated in the following workshops:-\n"+events[0]+"\n\n You can download your receipt from the My Receipts " + "section of the Pulzion'19 app using your unique Registration ID." + "\n\nOur app can be downloaded from: --------" + "Please feel free to reach out to us in case of doubts or difficulty.\nTanush Maddiwar: 7015032436\nAnother Contact: 0000000000" + "\n\nAll the Best!!\nRegards,\nPICT ACM Student Chapter\n\n\n" + dontreply;
 
                                     //Creating SendMail object
                                     SendMail sm = new SendMail(WorkshopRegistrationActivity.this, email1, subject, message);
@@ -204,6 +223,20 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                                     sm.execute();
 
                                     dialog.dismiss();
+
+                                final AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(WorkshopRegistrationActivity.this);
+                                final View mView = getLayoutInflater().inflate(R.layout.progress_bar, null);
+                                mAlertDialog.setView(mView);
+                                final AlertDialog dialog = mAlertDialog.create();
+                                dialog.show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        startActivity(new Intent(WorkshopRegistrationActivity.this,WorkshopRegistrationActivity.class));
+                                    }
+                                },2000);
+
                                     //startActivity(new Intent(EventRegistrationActivity.this,EventRegistrationActivity.class));
 //                                finish();
 //                                startActivity(getIntent());
@@ -294,6 +327,24 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                 Intent intent=new Intent(getBaseContext(),LoginActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.changeTheme:
+                if (item.getItemId() == R.id.changeTheme) {
+                    int count = 0;
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+                        count = 1;
+                    final int finalCount = count;
+                    if (count == 1) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        finish();
+                        startActivity(getIntent());
+
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        finish();
+                        startActivity(getIntent());
+
+                    }
+                }
         }
         return super.onOptionsItemSelected(item);
     }

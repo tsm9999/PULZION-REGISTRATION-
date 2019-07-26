@@ -10,7 +10,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@color/white</item>
 
-
+        <!--@style/SpinKitView-->
+        <!--@style/SpinKitView.Circle-->
+        <!--@style/SpinKitView.Large-->
+        <!--@style/SpinKitView.Small-->
+        <!--@style/SpinKitView.Small.DoubleBounce-->
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -30,6 +34,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+<style name="Theme.Transparent" parent ="android:Theme">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+</style>
 
 </resources>
