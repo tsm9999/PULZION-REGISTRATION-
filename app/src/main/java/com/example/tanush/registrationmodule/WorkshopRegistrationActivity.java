@@ -360,10 +360,10 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            Intent a = new Intent(Intent.ACTION_MAIN);
-            a.addCategory(Intent.CATEGORY_HOME);
-            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(a);
+            Intent b = new Intent(Intent.ACTION_MAIN);
+            b.addCategory(Intent.CATEGORY_HOME);
+            b.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(b);
         }
 
         this.doubleBackToExitPressedOnce = true;
