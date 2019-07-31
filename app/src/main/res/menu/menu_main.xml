@@ -8,13 +8,8 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_refresh"
         />
-    <item
-        android:id="@+id/changeTheme"
-        android:title="Change Theme"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_dark"
-        android:contentDescription="InterChange Light and Dark Themes"
-        />
+
+
     <item
         android:id="@+id/logout"
         android:title="LogOut"

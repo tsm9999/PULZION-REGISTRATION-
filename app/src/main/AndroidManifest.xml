@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tanush.registrationmodule">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.pasc.tanush.registrationmodule">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
+
         android:name=".UserSession"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="PULZION'19 REGISTRATION"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".WorkshopRegistrationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".EventRegistrationActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".qrCode" />
         <activity android:name=".PaymentActivity" />
         <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="ExtraText">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

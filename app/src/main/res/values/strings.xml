@@ -17,6 +17,8 @@
 
     <string name="techevents"><b><u>Technical Events</u></b></string>
     <string name="nontechevents"><b><u>Non-Technical Events</u></b></string>
+    <string name="workshops"><b><u>WORKSHOPS</u></b></string>
+
     <string-array name="year">
         <item>FE</item>
         <item>SE</item>
