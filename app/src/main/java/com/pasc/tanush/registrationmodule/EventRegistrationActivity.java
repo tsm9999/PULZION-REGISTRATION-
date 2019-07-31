@@ -274,7 +274,7 @@ public class EventRegistrationActivity extends AppCompatActivity
 
                                 String event = "";
                                 //int amount = 0;
-                                String rnd = getSaltString();
+                                final String rnd = getSaltString();
 
                                 String yearkonsa = "";
                                 int fes = 0, ses = 0, tes = 0, bes = 0, bugi = 0, bugt = 0, jci = 0, jct = 0, rii = 0, rit = 0, cb = 0, dq = 0, wad = 0, eq = 0, dt = 0, pr = 0, q2b = 0, inst = 0, cbi = 0, cbt = 0, goti = 0, gott = 0, friendsi = 0, friendst = 0, hpi = 0, hpt = 0, marveli = 0, marvelt = 0, dci = 0, dct = 0;
@@ -358,7 +358,7 @@ public class EventRegistrationActivity extends AppCompatActivity
                                     eq = 1;
                                     //amount+=100;
 
-                                    arrayList.add("Web_and_App_Development");
+                                    arrayList.add("ElectroQuest");
                                     event += "ElectroQuest\n";
                                     fcost.setText(String.valueOf(amount));
 
@@ -626,7 +626,11 @@ public class EventRegistrationActivity extends AppCompatActivity
                                     @Override
                                     public void run() {
                                         dialog.dismiss();
-                                        startActivity(new Intent(EventRegistrationActivity.this, EventRegistrationActivity.class));
+                                        Intent intent = new Intent(getBaseContext(), qrCode.class);
+                                        intent.putExtra("qrId", rnd);
+                                        startActivity(intent);
+
+                                        //                          startActivity(new Intent(EventRegistrationActivity.this, EventRegistrationActivity.class));
                                     }
                                 }, 2000);
 //                            ProgressBar progressBar = (ProgressBar)findViewById(R.id.spin_kit);

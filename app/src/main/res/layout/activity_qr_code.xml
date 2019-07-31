@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_marginTop="60dp"
+
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#010315"
     android:orientation="vertical"
+        android:layout_marginTop="55dp"
     tools:context=".qrCode">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"></androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,6 +39,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="QR CODE"
+        android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="25sp" />
     <LinearLayout
@@ -26,6 +52,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:layout_margin="15dp"
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -35,10 +62,21 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:id="@+id/done"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorAccent"
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Done" />
 
 </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_event_registration"
+        app:menu="@menu/activity_event_registration_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

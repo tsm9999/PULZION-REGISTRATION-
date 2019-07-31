@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 public class WorkshopUser {
     String participant1;
-    String rnd;
-    String year;
-    String volunteer;
+    private String id;
+    private String year;
+    private String volunteer;
     String mail;
     String contact;
     String collegeName;
     String slot;
-    ArrayList<String> events;
+    private ArrayList<String> events;
     int cost;
-    int pending;
+    private int pending;
 
-    public WorkshopUser(String participant1, String volunteer, String mail, String contact, String collegeName, String slot, ArrayList<String> events, int cost, int pending, String rnd, String year) {
+    WorkshopUser(String participant1, String volunteer, String mail, String contact, String collegeName, String slot, ArrayList<String> events, String id, String year, int cost, int pending) {
         this.participant1 = participant1;
         this.volunteer = volunteer;
         this.mail = mail;
@@ -25,9 +25,25 @@ public class WorkshopUser {
         this.events = events;
         this.cost = cost;
         this.pending = pending;
-        this.rnd = rnd;
+        this.id = id;
         this.year = year;
 
+    }
+
+    public String getid() {
+        return id;
+    }
+
+    public void setid(String id) {
+        this.id = id;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getParticipant1() {

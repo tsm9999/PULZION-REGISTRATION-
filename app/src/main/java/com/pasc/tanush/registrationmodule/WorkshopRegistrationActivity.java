@@ -235,7 +235,7 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
 
                                         int paid = (int) Integer.parseInt(etPay.getText().toString());
                                         if (finalHack == 1 || finalIot == 1) {
-                                            WorkshopUser workshopUser = new WorkshopUser(participant1, volunteer, email, contactno, college, "null", arrayList, amount, (amount - paid), rnd, finalYearkonsa);
+                                            WorkshopUser workshopUser = new WorkshopUser(participant1, volunteer, email, contactno, college, "null", arrayList, rnd, finalYearkonsa, amount, (amount - paid));
                                             workshopReference.add(workshopUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
                                                 public void onSuccess(DocumentReference documentReference) {
@@ -243,7 +243,6 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                                                     Toast.makeText(WorkshopRegistrationActivity.this, "User Entered Into Database", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-
                                         }
                                         Resources res = getResources();
                                         String dontreply = String.format(res.getString(R.string.donotreply));
@@ -268,7 +267,10 @@ public class WorkshopRegistrationActivity extends AppCompatActivity implements
                                             @Override
                                             public void run() {
                                                 dialog.dismiss();
-                                                startActivity(new Intent(WorkshopRegistrationActivity.this, WorkshopRegistrationActivity.class));
+                                                Intent intent = new Intent(getBaseContext(), qrCode.class);
+                                                intent.putExtra("qrId", rnd);
+                                                startActivity(intent);
+                                                //                                               startActivity(new Intent(WorkshopRegistrationActivity.this, WorkshopRegistrationActivity.class));
                                             }
                                         }, 2000);
                                     } else {
