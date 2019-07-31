@@ -7,7 +7,7 @@ android {
         applicationId "com.pasc.tanush.registrationmodule"
         minSdkVersion 20
         targetSdkVersion 29
-        versionCode 9
+        versionCode 10
         multiDexEnabled true
 
         versionName "1.2"
