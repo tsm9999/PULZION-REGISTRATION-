@@ -10,7 +10,7 @@
         android:name=".UserSession"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="PULZION'19 REGISTRATION"
+        android:label="Event Name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"

@@ -19,13 +19,13 @@
         android:layout_height="100sp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/pasc" />
+        app:srcCompat="@drawable/process" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="PICT ACM Student Chapter"
+        android:text="Organization Name"
         android:textColor="#259cd4"
         android:textColorHint="#259cd4"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
